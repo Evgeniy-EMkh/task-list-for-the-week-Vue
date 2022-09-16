@@ -1,9 +1,21 @@
 <template>
   <div class="form">
-    <div class="task__item" v-for="item in taskList[curentDay]" :key="item.id">
+    <div
+      class="task__form"
+      v-for="(item, indx) in displayedTaskList"
+      :key="item.id"
+    >
       <div :class="{ expired: item.time < curentTime }">
-        <p>{{ item.time }}</p>
-        <p>{{ item.text }}</p>
+        <input
+          class="input-task"
+          type="text"
+          v-model.lazy="displayedTaskList[indx].time"
+        />
+        <input
+          class="input-task"
+          type="text"
+          v-model.lazy="displayedTaskList[indx].text"
+        />
       </div>
       <p class="delete__btn" @click="deleteData(item)">x</p>
     </div>
@@ -26,6 +38,7 @@ export default {
   data() {
     return {
       taskList: {},
+      displayedTaskList: [],
       taskTime: "",
       taskText: "",
       curentTime: "",
@@ -45,22 +58,37 @@ export default {
       this.taskText = "";
 
       this.$store.commit("setTaskList", taskItem);
+      this.taskList = this.$store.getters.getTaskList;
     },
     deleteData(item) {
       const taskItem = [this.curentDay, item.id];
       this.$store.commit("deleteTaskList", taskItem);
+      this.taskList = this.$store.getters.getTaskList;
+      this.displayedTaskList = this.taskList[this.curentDay];
     },
   },
-  created() {
+  mounted() {
     this.taskList = this.$store.getters.getTaskList;
+    this.taskList[this.curentDay].forEach((el) =>
+      this.displayedTaskList.push(el)
+    );
   },
+
   updated() {
+    this.displayedTaskList = this.taskList[this.curentDay];
     const time = new Date();
     this.curentTime = `${time.getHours()}:${time.getMinutes()}`;
-    this.taskList[this.curentDay].sort(
+    this.displayedTaskList.sort(
       (a, b) =>
         Number(a.time.split(":").join("")) - Number(b.time.split(":").join(""))
     );
+
+    const taskItemItem = [];
+    taskItemItem[0] = this.curentDay;
+    taskItemItem[1] = this.displayedTaskList;
+    this.$store.commit("updateTaskList", taskItemItem);
+    console.log("updated");
+    console.log("curent day", this.curentDay);
   },
 };
 </script>
@@ -70,7 +98,7 @@ export default {
   width: 500px;
 }
 .input-form,
-.task__item {
+.task__form {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -107,5 +135,10 @@ export default {
 }
 .expired {
   background-color: rgb(231, 178, 169);
+}
+
+.input-task {
+  border: none;
+  background-color: transparent;
 }
 </style>
