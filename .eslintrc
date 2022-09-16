@@ -1,0 +1,24 @@
+{
+  // "env": {
+  //   "es6": true
+  // },
+  "rules": {
+    "no-var": "error",
+    "semi": "error",
+    "no-multi-spaces": "error",
+    "space-in-parens": "error",
+    "no-multiple-empty-lines": "error",
+    "prefer-const": "error",
+    "no-use-before-define": "error",
+    "no-unreachable-loop": "error",
+    "no-template-curly-in-string": "error",
+    "no-self-compare": "error",
+    "no-proto": "error",
+    "no-undefined": "error"
+  },
+  "parser": "vue-eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "sourceType": "module"
+  }
+}
