@@ -1,24 +1,31 @@
 <template>
   <div class="form">
-    <div
-      class="task__form"
-      v-for="(item, indx) in displayedTaskList"
-      :key="item.id"
-    >
-      <div :class="{ expired: item.time < curentTime }">
-        <input
-          class="input-task"
-          type="text"
-          v-model.lazy="displayedTaskList[indx].time"
-        />
-        <input
-          class="input-task"
-          type="text"
-          v-model.lazy="displayedTaskList[indx].text"
-        />
+    <div class="form__star">*</div>
+
+    <transition-group name="taskanimation" tag="div">
+      <div
+        class="task__form"
+        v-for="(item, indx) in displayedTaskList"
+        :key="item.id"
+      >
+        <div
+          class="task__form-item"
+          :class="{ expired: item.time < curentTime }"
+        >
+          <input
+            class="input-task"
+            type="text"
+            v-model.lazy="displayedTaskList[indx].time"
+          />
+          <input
+            class="input-task"
+            type="text"
+            v-model.lazy="displayedTaskList[indx].text"
+          />
+        </div>
+        <p class="delete__btn" @click="deleteData(item)">x</p>
       </div>
-      <p class="delete__btn" @click="deleteData(item)">x</p>
-    </div>
+    </transition-group>
     <div class="input-form">
       <input class="input" type="text" v-model.lazy="taskTime" />
       <input class="input" type="text" v-model.lazy="taskText" />
@@ -96,6 +103,8 @@ export default {
 <style scoped lang="scss">
 .form {
   width: 500px;
+  padding: 20px;
+  border: 2px solid black;
 }
 .input-form,
 .task__form {
@@ -103,7 +112,7 @@ export default {
   justify-content: center;
   align-items: center;
 
-  & div {
+  & .task__form-item {
     display: flex;
     justify-content: space-between;
     width: 400px;
@@ -136,9 +145,27 @@ export default {
 .expired {
   background-color: rgb(231, 178, 169);
 }
-
 .input-task {
   border: none;
   background-color: transparent;
+}
+.form__star {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 43px;
+  cursor: pointer;
+  margin-right: 9px;
+}
+
+// animation
+
+.taskanimation-enter-active {
+  transition: all 0.4s ease;
+}
+
+.taskanimation-enter-from {
+  opacity: 0;
+  transform: translateY(150px);
 }
 </style>
