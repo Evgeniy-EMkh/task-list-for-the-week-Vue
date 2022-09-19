@@ -1,4 +1,4 @@
-# agima-spa
+# task-list-for-the-week-Vue
 
 ## Project setup
 ```
